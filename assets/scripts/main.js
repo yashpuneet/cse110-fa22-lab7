@@ -69,9 +69,18 @@ async function getRecipes() {
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
   /**************************/
+
+  if(localStorage.length != 0)
+  {
+    return JSON.parse(localStorage.getItem('recipes'));
+  }
+
   // The rest of this method will be concerned with requesting the recipes
   // from the network
   // A2. TODO - Create an empty array to hold the recipes that you will fetch
+
+  let recipes = [];
+
   // A3. TODO - Return a new Promise. If you are unfamiliar with promises, MDN
   //            has a great article on them. A promise takes one parameter - A
   //            function (we call these callback functions). That function will
@@ -100,6 +109,28 @@ async function getRecipes() {
   //            resolve() method.
   // A10. TODO - Log any errors from catch using console.error
   // A11. TODO - Pass any errors to the Promise's reject() function
+
+  return new Promise(async function(resolve, reject) {
+     //Looping through each recipe in RECIPE_URL
+     for(let recipe of RECIPE_URLS)
+     {
+      try
+      {
+        console.log("fetching");
+        let incomingData = await fetch(recipe);
+        incomingData = await incomingData.json();
+        recipes.push(incomingData);
+        //TODO: A9 Check??
+        saveRecipesToStorage(recipes);
+        resolve(recipes);
+      }
+      catch(errors)
+      {
+        console.log(errors);
+        reject(errors);
+      }
+     }
+  });
 }
 
 /**
