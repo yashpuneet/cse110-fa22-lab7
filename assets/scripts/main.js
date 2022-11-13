@@ -116,13 +116,14 @@ async function getRecipes() {
      {
       try
       {
-        console.log("fetching");
         let incomingData = await fetch(recipe);
         incomingData = await incomingData.json();
         recipes.push(incomingData);
-        //TODO: A9 Check??
-        saveRecipesToStorage(recipes);
-        resolve(recipes);
+        if(recipes.length == RECIPE_URLS.length)
+        {
+          saveRecipesToStorage(recipes);
+          resolve(recipes);
+        }
       }
       catch(errors)
       {
